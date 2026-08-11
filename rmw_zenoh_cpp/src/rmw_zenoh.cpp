@@ -2110,10 +2110,15 @@ check_and_attach_condition(
     }
   }
 
-  // No conditions are available. Set the triggered flag of the wait_set to false.
-  // Note that wait_set_data->condition_mutex has been locked before calling
-  // check_and_attach_condition. So it's safe to modify the wait_set_data triggered flag.
-  wait_set_data->triggered = false;
+  // No conditions are available.
+  //
+  // Do NOT clear wait_set_data->triggered here. Since #1005/#1015, rmw_wait() no longer
+  // holds condition_mutex while calling check_and_attach_condition(), so this write races
+  // with the notifier paths (e.g. SubscriptionData::add_new_message()) which set
+  // triggered = true under that mutex. Losing such a wakeup parks rmw_wait() forever.
+  //
+  // The reset is also redundant: rmw_wait() sets triggered = false under condition_mutex
+  // immediately before calling this function.
 
   return false;
 }
