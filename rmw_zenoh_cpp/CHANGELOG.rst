@@ -2,6 +2,11 @@
 Changelog for package rmw_zenoh_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.1.10 (2026-08-11)
+-------------------
+* fix: don't clear wait_set triggered flag without holding condition_mutex (`#1 <https://github.com/innate-inc/rmw_zenoh/pull/1>`_)
+* Contributors: Karmanyaah Malhotra
+
 0.1.9 (2026-07-22)
 ------------------
 * fix: Fix lock order inversion / deadlock (`#1015 <https://github.com/ros2/rmw_zenoh/issues/1015>`_)
